@@ -11,7 +11,6 @@ public class Board {
   private int viewCount;
   private int like;
 
-
   @Override
   public int hashCode() {
     final int prime = 31;

@@ -1,17 +1,53 @@
 package com.eomcs.pms.domain;
 
 import java.sql.Date;
+import com.eomcs.util.CsvObject;
 
-public class Task {
+public class Task implements CsvObject {
   private int no;
   private String content;
   private Date deadline;
   private String owner;
   private int status;
 
-  public int getNo() {
-    return no;
+  public Task() {}
+
+  public Task(String csv) {
+    String[] data = csv.split(",");
+    this.setNo(Integer.parseInt(data[0]));
+    this.setContent(data[1]);
+    this.setDeadline(Date.valueOf(data[2]));
+    this.setStatus(Integer.parseInt(data[3]));
+    this.setOwner(data[4]);
   }
+
+  @Override
+  public String toString() {
+    return "Task [no=" + no + ", content=" + content + ", deadline=" + deadline + ", owner=" + owner
+        + ", status=" + status + "]";
+  }
+
+  @Override
+  public String toCsvString() {
+    return String.format("%d,%s,%s,%d,%s", 
+        this.getNo(),
+        this.getContent(),
+        this.getDeadline(),
+        this.getStatus(),
+        this.getOwner());
+  }
+
+  public static Task valueOfCsv(String csv) {
+    String[] data = csv.split(",");
+    Task task = new Task();
+    task.setNo(Integer.parseInt(data[0]));
+    task.setContent(data[1]);
+    task.setDeadline(Date.valueOf(data[2]));
+    task.setStatus(Integer.parseInt(data[3]));
+    task.setOwner(data[4]);
+    return task;
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -19,9 +55,9 @@ public class Task {
     result = prime * result + ((content == null) ? 0 : content.hashCode());
     result = prime * result + ((deadline == null) ? 0 : deadline.hashCode());
     result = prime * result + no;
-    result = prime * result + ((owner == null) ? 0 : owner.hashCode());
     return result;
   }
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj)
@@ -43,12 +79,11 @@ public class Task {
       return false;
     if (no != other.no)
       return false;
-    if (owner == null) {
-      if (other.owner != null)
-        return false;
-    } else if (!owner.equals(other.owner))
-      return false;
     return true;
+  }
+
+  public int getNo() {
+    return no;
   }
   public void setNo(int no) {
     this.no = no;
